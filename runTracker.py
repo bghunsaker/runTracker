@@ -1,6 +1,7 @@
 from __future__ import print_function
 import datetime
 from datetime import timedelta
+import math
 import pickle
 import os.path
 from googleapiclient.discovery import build
@@ -11,6 +12,8 @@ from google.auth.transport.requests import Request
 SCOPES = ["https://www.googleapis.com/auth/calendar.readonly"]
 # set this to Sunday prior to first recorded run
 START_DATE = datetime.date.fromisoformat("2020-05-17")
+# this sets how many miles each dot represents in our Weekly Totals graph 
+GRAPH_INTERVAL = .5
 
 
 def main():
@@ -88,6 +91,7 @@ def main():
     )
     print("Average miles per run:", format(miles_total / ctr, ".1f"))
     print("\nWeekly totals starting", START_DATE)
+    print("Each dot represents", GRAPH_INTERVAL, "miles run that week")
     find_weekly_totals(now, START_DATE, runs_list)
 
 
@@ -97,7 +101,7 @@ def find_weekly_totals(now, START_DATE, runs_list):
     week_ctr = 1
     cur_date = START_DATE
 
-    while i < (now - START_DATE).days:
+    while i <= (now - START_DATE).days:
         i += 7
         cur_week_total = 0
         cur_date += d
@@ -107,9 +111,9 @@ def find_weekly_totals(now, START_DATE, runs_list):
         # setup for and create one row per week of dots, each representing .5 mi ran
         graph_string = ""
         j = 0
-        while j < (cur_week_total / 0.5):
+        while j < cur_week_total:
             graph_string += "."
-            j += 0.5
+            j += GRAPH_INTERVAL
 
         print(format(week_ctr, "2d"), ":", "{:>4.1f}".format(cur_week_total), graph_string)
         week_ctr += 1
