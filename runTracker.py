@@ -87,7 +87,7 @@ def main():
 
     # output and graph weekly totals
     print("\nWeekly totals starting", START_DATE)
-    print("Each dot represents", GRAPH_INTERVAL, "miles run that week")
+    print("Each dot represents", GRAPH_INTERVAL, "miles ran that week")
     prev_month_weekly_avg = []
     find_weekly_totals(now, START_DATE, runs_list, prev_month_weekly_avg)
 
